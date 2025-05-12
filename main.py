@@ -3,6 +3,9 @@ from langchain.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from langchain_core.output_parsers import StrOutputParser
 from langchain_deepseek import ChatDeepSeek
+from dotenv import load_dotenv
+load_dotenv()
+
 
 def clean_string(s):
     # Remove \boxed{} wrapper
@@ -13,13 +16,17 @@ def clean_string(s):
     s = ' '.join(s.split())
     return s.strip()
 
-def gen_restaurant_name_and_items(cuisine):
-    llm = ChatDeepSeek(
+# print(os.environ["api_key"])
+
+llm = ChatDeepSeek(
         model="deepseek/deepseek-prover-v2:free",
         temperature=0.6,
-        api_key=os.environ.get("api_key"),
-        api_base="https://openrouter.ai/api/v1",
+        api_key=os.environ["api_key"],
+        api_base=os.environ["api_url"],
     )
+
+def gen_restaurant_name_and_items(cuisine):
+    
 
     prompt_temp_name = PromptTemplate(
         input_variables=["cuisine"],
